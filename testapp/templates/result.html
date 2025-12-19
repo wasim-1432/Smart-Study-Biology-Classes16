@@ -1,0 +1,67 @@
+{% load static %}
+<!doctype html>
+<html lang="hi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Result — Smart Study</title>
+  <link rel="stylesheet" href="{% static 'css/quiz.css' %}">
+</head>
+<body class="light">
+  <header class="topbar">
+    <div class="logo">
+      <img src="{% static 'images/smartlogo.jpeg' %}" alt="Logo">
+    </div>
+    <div class="title">Test Result</div>
+  </header>
+
+  <main class="container result-wrap">
+    <section class="result-card">
+      <h2>आपका स्कोर</h2>
+
+      <div class="score">
+        <div class="big">{{ score }} / {{ total }}</div>
+        <div class="percent">{{ percentage }}% accuracy</div>
+      </div>
+
+      <div class="charts">
+        <div class="bar">
+          <div class="bar-label">Correct</div>
+          <div class="bar-fill" ></div>
+        </div>
+
+        <div class="bar">
+          <div class="bar-label">Wrong</div>
+          <div class="bar-fill wrong" ></div>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button onclick="navigator.share ? shareResult() : alert('Share supported on mobile only')" class="btn">Share Result</button>
+        <a href="{% url 'testpaper' %}" class="btn secondary">Retake Test</a>
+      </div>
+    </section>
+
+    <section class="detailed">
+      <h3>Detailed Review</h3>
+
+      {% for r in result %}
+      <div class="review-card">
+        <div class="r-q">{{ forloop.counter }}. {{ r.question|linebreaksbr }}</div>
+        <div class="r-your">Your Answer: {{ r.selected|default:"(no answer)" }}</div>
+        <div class="r-correct">Correct: {{ r.correct }}</div>
+        <div class="r-explain">{{ r.explanation }}</div>
+      </div>
+      {% endfor %}
+    </section>
+  </main>
+
+  <script>
+    function shareResult(){
+      const text = `मेरी score: {{ score }} / {{ total }} ({{ percentage }}%) — Smart Study Biology`;
+      navigator.share({ title: 'My Test Result', text });
+    }
+  </script>
+
+</body>
+</html>

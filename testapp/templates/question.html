@@ -1,0 +1,79 @@
+{% load static %}
+<!doctype html>
+<html lang="hi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Smart Study — Test</title>
+  <link rel="stylesheet" href="{% static 'css/quiz.css' %}">
+</head>
+<body class="light">
+  <header class="topbar">
+    <div class="logo">
+      <img src="{% static 'images/smartlogo.jpeg' %}" alt="Logo">
+    </div>
+    <div class="title">SMART STUDY BIOLOGY CLASSES</div>
+    <div class="controls">
+      <button id="themeToggle" aria-label="Toggle theme">🌙</button>
+      <div class="timer" id="timer">Time: --:--</div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <h2>Test Paper - MCQ Based</h2>
+    </section>
+
+    <form id="quizForm" method="post" novalidate>
+      {% csrf_token %}
+
+      <div class="progress-wrap">
+        <div id="progressText">Question 1 of {{ questions|length }}</div>
+        <div class="progress">
+          <div id="progressBar" class="progress-bar" style="width:0%"></div>
+        </div>
+      </div>
+
+      <div id="questionsArea">
+        {% for q in questions %}
+        <article class="question-card" data-index="{{ forloop.counter0 }}">
+          <div class="q-header">
+            <span class="q-num">{{ forloop.counter }}.</span>
+            <div class="q-text">{{ q.que|linebreaksbr }}</div>
+          </div>
+
+          <div class="options">
+            <label class="opt">
+              <input type="radio" name="option{{ forloop.counter }}" value="a"> <span>{{ q.a }}</span>
+            </label>
+            <label class="opt">
+              <input type="radio" name="option{{ forloop.counter }}" value="b"> <span>{{ q.b }}</span>
+            </label>
+            <label class="opt">
+              <input type="radio" name="option{{ forloop.counter }}" value="c"> <span>{{ q.c }}</span>
+            </label>
+            <label class="opt">
+              <input type="radio" name="option{{ forloop.counter }}" value="d"> <span>{{ q.d }}</span>
+            </label>
+          </div>
+
+        </article>
+        {% endfor %}
+      </div>
+
+      <div class="nav-row">
+        <button type="button" id="prevBtn" class="btn secondary">Previous</button>
+        <button type="button" id="nextBtn" class="btn primary">Next</button>
+        <button type="submit" id="submitBtn" class="btn success">Submit Test</button>
+      </div>
+
+    </form>
+  </main>
+
+  <footer class="footer">
+    <small>© Smart Study Biology Classes</small>
+  </footer>
+
+  <script src="{% static 'js/quiz.js' %}"></script>
+</body>
+</html>
